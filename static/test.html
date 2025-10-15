@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selena.AI — Alfa 0.1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #0d0d0f;
+      --text: #e4e6eb;
+      --accent1: #9333ea; /* violet */
+      --accent2: #2563eb; /* blue */
+      --accent3: #06b6d4; /* cyan */
+    }
+    body {
+      margin:0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent1), var(--accent2), var(--accent3));
+      background-size: 200% 200%;
+      animation: gradientMove 6s ease infinite;
+      color: #fff;
+      transition: opacity 0.2s ease;
+    }
+    .btn-primary:hover {
+      opacity: 0.85;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="glass p-4 flex justify-between items-center">
+    <div class="flex items-center">
+      <div class="w-8 h-8 mr-2 rounded-lg bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 animate-pulse"></div>
+      <h1 class="text-lg font-semibold text-white">Selena.AI 
+        <span class="text-xs ml-2 text-gray-400">(Alfa 0.1)</span>
+      </h1>
+    </div>
+    <nav class="space-x-6 text-sm text-gray-400">
+      <a href="#chat" class="hover:text-white">Чат</a>
+      <a href="#info" class="hover:text-white">О модели</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex flex-1 overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="w-64 glass p-4 flex flex-col">
+      <h2 class="font-medium text-gray-300 mb-4">Сессии</h2>
+      <div class="space-y-2 flex-1 overflow-y-auto">
+        <div class="p-2 rounded-xl bg-gradient-to-r from-purple-500/20 to-cyan-400/20 text-white font-semibold">
+          Главная
+        </div>
+      </div>
+      <button class="btn-primary px-4 py-2 rounded-xl mt-4">+ Новая сессия</button>
+    </aside>
+
+    <!-- CHAT -->
+    <main class="flex-1 flex flex-col p-4">
+      <div id="chat-window" class="flex-1 overflow-y-auto space-y-3 p-2"></div>
+      <div class="flex mt-4">
+        <textarea id="chat-input" rows="1"
+          class="flex-1 p-3 rounded-l-xl bg-black/70 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          placeholder="Напишите сообщение и нажмите Enter..."></textarea>
+        <button id="chat-send" class="btn-primary px-6 rounded-r-xl">➤</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const chatWindow = document.getElementById('chat-window');
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+
+    chatSend.onclick = send;
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+    });
+
+    async function send() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      append('user', text);
+      chatInput.value = '';
+      try {
+        const res = await fetch('http://127.0.0.1:8000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: null, role: 'user', content: text })
+        });
+        const data = await res.json();
+        append('assistant', data.content);
+      } catch {
+        append('assistant', '(Ошибка: не удалось получить ответ)');
+      }
+    }
+
+    function append(role, text) {
+      const div = document.createElement('div');
+      div.className = `p-3 max-w-[70%] whitespace-pre-wrap ${
+        role === 'user' 
+          ? 'ml-auto bg-gradient-to-r from-purple-600 to-cyan-500 text-white rounded-l-2xl rounded-tr-2xl shadow-lg'
+          : 'bg-white/10 text-gray-200 rounded-r-2xl rounded-tl-2xl border border-gray-800'
+      }`;
+      div.innerText = text;
+      chatWindow.append(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+  </script>
+</body>
+</html>
