@@ -9,12 +9,6 @@
 
 Selena.AI — это проект по созданию и тонкой настройке языковой модели, специально обучаемой для помощи в разработке ПО, объяснении концепций и генерации кода.
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red)
-![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-yellow)
-![LoRA](https://img.shields.io/badge/Fine--Tuning-LoRA-green)
-![Google Colab](https://img.shields.io/badge/Google-Colab-orange)
-
 ---
 
 ## 📖 История создания
@@ -87,7 +81,7 @@ Selena.AI — это проект по созданию и тонкой наст
 ## 💾 Структура проекта
 
 ```
-
+---
 Selena.AI/
 ├── data/
 │   ├── dialogs_5000.json
@@ -104,6 +98,7 @@ Selena.AI/
 ├── LICENSE
 ├── README.md
 └── requirements.txt
+---
 
 ````
 
