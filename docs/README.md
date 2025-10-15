@@ -97,11 +97,16 @@ Selena.AI/
 
 ## 🛠️ Технологический стек
 
-- **Python**, **PyTorch**
-- **Hugging Face Transformers**, **PEFT**
-- **LoRA** (Low-Rank Adaptation)
-- **Google Colab / Colab Pro**
-- **FastAPI** (backend), **React + HTML/CSS/JS** (frontend)
+| Компонент | Инструменты / Технологии
+|-----------|-------------------------|
+| Язык программирования | Python |
+| ML-фреймворк | PyTorch |
+| NLP-библиотеки | Hugging Face Transformers, PEFT |
+| Метод тонкой настройки | LoRA (Low-Rank Adaptation) |
+| Инфраструктура | Google Colab / Colab Pro |
+| Backend | FastAPI |
+| Frontend | React + HTML/CSS/JS |
+
 
 ---
 
